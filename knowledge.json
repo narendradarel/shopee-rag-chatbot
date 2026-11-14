@@ -1,0 +1,19 @@
+{
+  "keywords": {
+    "jam buka": "jam buka",
+    "operasional": "jam buka",
+    "link toko": "toko",
+    "shopee": "toko",
+    "cara pesan": "cara pesan",
+    "order": "cara pesan",
+    "garansi": "garansi",
+    "kontak": "kontak"
+  },
+  "responses": {
+    "jam buka": "Layanan konsultasi chat *Samsung Official Shop* aktif setiap hari Senin - Minggu pukul 09.00 - 21.00 WIB.",
+    "toko": "Kunjungi lapak resmi kami di Shopee melalui tautan berikut:\n🛒 https://shopee.co.id/samsung.official",
+    "cara pesan": "Untuk melakukan pemesanan, silakan tanyakan produk Samsung yang Anda cari di chat ini, lalu klik tautan produk resmi Shopee (*contents href*) yang kami berikan untuk checkout.",
+    "garansi": "Seluruh unit yang dijual di *Samsung Official Shop* merupakan produk 100% original dan bergaransi resmi *Samsung Electronics Indonesia (SEIN)*.",
+    "kontak": "Informasi Resmi *Samsung Official Shop*:\n🛒 *Toko Shopee:* https://shopee.co.id/samsung.official\n💬 *Layanan Chat:* Balas langsung melalui WhatsApp ini\n⏰ *Jam Layanan:* Setiap Hari (09.00 - 21.00 WIB)"
+  }
+}

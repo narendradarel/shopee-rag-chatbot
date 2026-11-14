@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot WhatsApp RAG - Samsung Official Shop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <section class="header">
+      <div class="header-title">
+        <h1>Chatbot WhatsApp RAG — Samsung Official Shop</h1>
+        <p class="subtitle">Integrasi Chatbot WhatsApp dengan Groq AI & Katalog Scraping Shopee</p>
+      </div>
+      <div class="status-wrapper">
+        <span class="status-indicator" id="statusDot"></span>
+        <span id="statusText">Bot Offline</span>
+      </div>
+      <div class="btn-group">
+        <button id="startBtn">Mulai Bot</button>
+        <button id="stopBtn" class="hidden">Hentikan Bot</button>
+        <button id="resetBtn" title="Hapus sesi WA yang nyangkut / logout">Reset Sesi WA</button>
+      </div>
+    </section>
+
+    <section id="qrSection" class="panel hidden">
+      <h2>Pindai Kode QR</h2>
+      <p>Buka WhatsApp pada ponsel Anda, buka menu <strong>Perangkat Tertaut</strong>, lalu arahkan kamera ke kode QR berikut:</p>
+      <div id="qrcode">
+        <div class="loading-spinner">Menunggu kode QR dari WhatsApp...</div>
+      </div>
+    </section>
+
+    <section id="readySection" class="panel hidden">
+      <div class="ready-badge">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <div class="ready-content">
+          <div class="ready-header-row">
+            <h2>Bot Terhubung</h2>
+            <span id="botNumberBadge" class="bot-number-badge">Nomor WA: <strong id="botNumberText">-</strong></span>
+          </div>
+          <p>Bot siap menerima dan membalas pesan WhatsApp secara otomatis menggunakan Groq AI & RAG.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="groqQuotaSection">
+      <div class="quota-header">
+        <div>
+          <h2>Monitoring Kuota Groq AI</h2>
+          <p class="section-desc">Informasi sisa kuota request, batas token (TPM), dan model Groq AI yang sedang aktif.</p>
+        </div>
+        <button id="refreshQuotaBtn" class="btn-refresh" title="Perbarui kuota langsung dari Groq">🔄 Cek Kuota</button>
+      </div>
+
+      <div class="quota-grid">
+        <div class="quota-card">
+          <div class="quota-card-label">Sisa Request</div>
+          <div class="quota-card-value" id="groqReqRemaining">Memuat...</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="groqReqBar" style="width: 100%;"></div>
+          </div>
+          <div class="quota-card-sub" id="groqReqReset">Reset dalam: -</div>
+        </div>
+
+        <div class="quota-card">
+          <div class="quota-card-label">Sisa Token (TPM)</div>
+          <div class="quota-card-value" id="groqTokenRemaining">Memuat...</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill tokens" id="groqTokenBar" style="width: 100%;"></div>
+          </div>
+          <div class="quota-card-sub">Batas Token Menit Ini</div>
+        </div>
+
+        <div class="quota-card">
+          <div class="quota-card-label">Model Groq Digunakan</div>
+          <div class="quota-card-value model-name" id="groqModelName">Memuat...</div>
+          <div class="quota-card-sub" id="groqLastChecked">Pembaruan: Baru saja</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Basis Pengetahuan (Manual Responses)</h2>
+      <p class="section-desc">Kata kunci dan respons FAQ dari <code>knowledge.json</code> yang dijawab bot tanpa memanggil AI.</p>
+
+      <div class="knowledge-preview">
+        <h3>Daftar Kata Kunci Aktif:</h3>
+        <div id="knowledgeList" class="knowledge-tags">
+          <em>Memuat daftar kata kunci...</em>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Katalog Produk Shopee Samsung (RAG Source)</h2>
+      <p class="section-desc">Data produk hasil scraping dari <code>data/products.csv</code> yang dijadikan konteks referensi oleh Groq AI.</p>
+      <div class="table-responsive">
+        <table id="productsTable">
+          <thead>
+            <tr>
+              <th>Nama Produk</th>
+              <th>Kategori</th>
+              <th>Harga</th>
+              <th>Info & Statistik</th>
+              <th>Link Shopee</th>
+            </tr>
+          </thead>
+          <tbody id="productsBody">
+            <tr><td colspan="5" style="text-align:center;">Memuat data produk...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
