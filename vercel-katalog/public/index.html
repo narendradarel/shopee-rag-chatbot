@@ -321,51 +321,40 @@
 
         async function loadProducts() {
             try {
-                const response = await fetch(CSV_URL, { cache: "no-store" });
-                if (!response.ok) {
-                    throw new Error(`Gagal mengambil ${CSV_URL} (${response.status})`);
-                }
-
-                const csvText = await response.text();
-                const rows = parseCSV(csvText);
-
                 const products = rows.map(row => {
                     const nama = getField(row, [
-                        "whitespace-normal",
-                        "nama",
+                        "no. nama produk",
+                        "nama produk",
                         "nama_produk",
+                        "nama",
+                        "product",
+                        "product name",
                         "name",
                         "title"
                     ]);
 
-                    let kategori = "Lainnya";
-                    const n = nama.toLowerCase();
+                    const kategori = getField(row, [
+                        "kategori",
+                        "category"
+                    ]) || "Lainnya";
 
-                    if (n.includes("galaxy tab")) kategori = "Tablet";
-                    else if (n.includes("galaxy watch")) kategori = "Smartwatch";
-                    else if (n.includes("galaxy buds")) kategori = "Earbuds";
-                    else if (n.includes("galaxy") && n.includes("case")) kategori = "Aksesoris";
-                    else if (n.includes("galaxy")) kategori = "Smartphone";
-                    else if (n.includes("tv")) kategori = "Televisi";
-                    else if (n.includes("kulkas")) kategori = "Kulkas";
-                    else if (n.includes("mesin cuci")) kategori = "Mesin Cuci";
-                    else if (/\bac\b/i.test(nama)) kategori = "AC";
-                    else if (n.includes("soundbar")) kategori = "Audio";
+                    const harga = getField(row, [
+                        "harga",
+                        "price"
+                    ]);
+
+                    const link = getField(row, [
+                        "link shopee",
+                        "link_shopee",
+                        "link",
+                        "url"
+                    ]);
 
                     return {
                         nama,
                         kategori,
-                        harga: getField(row, [
-                            "font-medium 2",
-                            "harga",
-                            "price"
-                        ]),
-                        link: getField(row, [
-                            "contents href",
-                            "link",
-                            "link_shopee",
-                            "url"
-                        ])
+                        harga,
+                        link
                     };
                 }).filter(p => p.nama);
 
