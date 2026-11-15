@@ -321,6 +321,13 @@
 
         async function loadProducts() {
             try {
+                const response = await fetch(CSV_URL, { cache: "no-store" });
+                if (!response.ok) {
+                    throw new Error(`Gagal mengambil ${CSV_URL} (${response.status})`);
+                }
+
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
 
                 const products = rows.map(row => {
                     const nama = getField(row, [
@@ -361,7 +368,6 @@
                         ])
                     };
                 }).filter(p => p.nama);
-
 
                 if (!products.length) {
                     throw new Error(
