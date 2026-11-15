@@ -1,33 +1,102 @@
+
+const API_URL = "/api/chat";
+
 const form = document.getElementById("chatForm");
 const input = document.getElementById("chatInput");
 const chatBox = document.getElementById("chatBox");
+const sendBtn = document.getElementById("sendBtn");
+const apiStatus = document.getElementById("apiStatus");
 
+let isLoading = false;
+
+// Periksa koneksi API
+async function checkStatus() {
+    try {
+        const response = await fetch(API_URL, {
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error("API tidak tersedia");
+        }
+
+        const data = await response.json();
+
+        if (data.status !== "online") {
+            throw new Error("API belum siap");
+        }
+
+        const count = Number(data.totalProduk);
+
+        apiStatus.classList.add("online");
+
+        if (Number.isFinite(count)) {
+            apiStatus.textContent =
+                count > 0
+                    ? `API aktif · ${count} produk`
+                    : "API aktif · Katalog kosong";
+        } else {
+            apiStatus.textContent = "API aktif";
+        }
+
+    } catch (error) {
+        apiStatus.classList.remove("online");
+        apiStatus.textContent = "API tidak tersedia";
+        console.error(error);
+    }
+}
+
+// Tambahkan pesan ke percakapan
 function addMessage(text, sender = "bot") {
-    const div = document.createElement("div");
-    div.className = `message ${sender}`;
-    div.textContent = text;
-    chatBox.appendChild(div);
+    const welcome = document.getElementById("welcome");
+
+    if (welcome) {
+        welcome.remove();
+    }
+
+    const message = document.createElement("div");
+    message.className = `message ${sender}`;
+
+    const label = document.createElement("span");
+    label.className = "message-label";
+    label.textContent = sender === "user" ? "Kamu" : "Asisten";
+
+    const bubble = document.createElement("div");
+    bubble.className = "message-bubble";
+    bubble.textContent = text;
+
+    message.append(label, bubble);
+    chatBox.appendChild(message);
+
     chatBox.scrollTop = chatBox.scrollHeight;
+
+    return bubble;
 }
 
-function setQuestion(text) {
-    input.value = text;
-    input.focus();
-}
+// Kirim pertanyaan ke RAG API
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    if (isLoading) return;
 
     const message = input.value.trim();
     if (!message) return;
 
+    isLoading = true;
+    sendBtn.disabled = true;
+    input.disabled = true;
+
     addMessage(message, "user");
     input.value = "";
+    input.style.height = "auto";
 
-    addMessage("Sedang memproses jawaban...", "bot");
+    const botBubble = addMessage(
+        "Sedang memproses jawaban...",
+        "bot"
+    );
 
     try {
-        const response = await fetch("/api/chat", {
+        const response = await fetch(API_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -37,26 +106,49 @@ form.addEventListener("submit", async (e) => {
 
         const data = await response.json();
 
-        // hapus pesan loading terakhir
-        const botMessages = document.querySelectorAll(".message.bot");
-        const lastBot = botMessages[botMessages.length - 1];
-        if (lastBot && lastBot.textContent === "Sedang memproses jawaban...") {
-            lastBot.remove();
-        }
-
         if (!response.ok) {
-            addMessage(data.error || "Terjadi kesalahan pada server.", "bot");
-            return;
+            throw new Error(
+                data.error || "Terjadi kesalahan pada server"
+            );
         }
 
-        addMessage(data.reply || "Tidak ada jawaban dari chatbot.", "bot");
+        botBubble.textContent =
+            data.reply || "Tidak ada jawaban dari chatbot.";
+
     } catch (error) {
-        const botMessages = document.querySelectorAll(".message.bot");
-        const lastBot = botMessages[botMessages.length - 1];
-        if (lastBot && lastBot.textContent === "Sedang memproses jawaban...") {
-            lastBot.remove();
-        }
+        botBubble.textContent =
+            "Gagal memproses pertanyaan. " + error.message;
 
-        addMessage("Gagal menghubungi server chatbot.", "bot");
+        console.error("Chat error:", error);
+
+    } finally {
+        isLoading = false;
+        sendBtn.disabled = false;
+        input.disabled = false;
+        input.focus();
     }
 });
+
+// Enter mengirim pesan, Shift+Enter membuat baris baru
+input.addEventListener("keydown", (event) => {
+    if (
+        event.key === "Enter" &&
+        !event.shiftKey &&
+        !event.isComposing
+    ) {
+        event.preventDefault();
+
+        if (!isLoading) {
+            form.requestSubmit();
+        }
+    }
+});
+
+// Sesuaikan tinggi kolom input
+input.addEventListener("input", () => {
+    input.style.height = "auto";
+    input.style.height =
+        `${Math.min(input.scrollHeight, 150)}px`;
+});
+
+checkStatus();

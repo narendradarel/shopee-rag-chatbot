@@ -2,183 +2,77 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chatbot Produk Shopee Samsung</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FFFFFF">
+    <title>Chatbot Produk Shopee</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/chat-web.js" defer></script>
 </head>
 
 <body>
-    <header class="navbar">
-        <div class="container nav-content">
-            <div class="brand">
-                <div class="brand-logo">S</div>
-                <div>
-                    <h1>Samsung Shopee Assistant</h1>
-                    <p>Chatbot Produk Berbasis RAG</p>
-                </div>
-            </div>
-            <a href="#chat-section" class="nav-btn">Coba Chatbot</a>
-        </div>
-    </header>
 
-    <section class="hero">
-        <div class="container hero-grid">
-            <div class="hero-text">
-                <span class="badge">AI Chatbot + RAG + Vercel</span>
-                <h2>Temukan Produk Samsung dari Data Shopee dengan Lebih Mudah</h2>
-                <p>
-                    Website ini menampilkan chatbot produk Samsung yang mengambil informasi
-                    dari data hasil scraping Shopee. Pengguna dapat menanyakan nama produk,
-                    harga, dan informasi terkait secara cepat.
+    <main class="app">
+
+        <header class="header">
+            <div class="logo" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <path d="M4 5h16v12H9l-5 4V5z" />
+                    <path d="M8 10h8M8 13h5" />
+                </svg>
+            </div>
+
+            <div>
+                <h1>Chatbot Produk Shopee</h1>
+                <p class="status" id="apiStatus" role="status">
+                    Memeriksa koneksi...
                 </p>
+            </div>
+        </header>
 
-                <div class="hero-actions">
-                    <a href="#chat-section" class="primary-btn">Mulai Bertanya</a>
-                    <a href="#features" class="secondary-btn">Lihat Fitur</a>
+        <section class="chat-area" id="chatBox" role="log" aria-label="Percakapan chatbot" aria-live="polite">
+            <div class="welcome" id="welcome">
+                <div class="welcome-icon" aria-hidden="true">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round">
+                        <rect x="4" y="7" width="16" height="13" rx="2" />
+                        <path d="M12 3v4M8 12h.01M16 12h.01M9 16h6" />
+                    </svg>
                 </div>
+                <h2>Ada yang ingin ditanyakan?</h2>
+                <p>
+                    Cari informasi produk, harga, dan deskripsi
+                    berdasarkan katalog Shopee.
+                </p>
+            </div>
+        </section>
 
-                <div class="hero-stats">
-                    <div class="stat-card">
-                        <h3>Online</h3>
-                        <p>API Chatbot Aktif</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>RAG</h3>
-                        <p>Berbasis Data Produk</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Vercel</h3>
-                        <p>Siap Diakses Publik</p>
-                    </div>
-                </div>
+        <form id="chatForm" class="composer">
+            <div class="input-group">
+                <label for="chatInput" class="sr-only">
+                    Pertanyaan produk
+                </label>
+
+                <textarea id="chatInput" placeholder="Tanyakan sesuatu tentang produk..." rows="1" maxlength="1200"
+                    required></textarea>
+
+                <button type="submit" id="sendBtn" aria-label="Kirim pesan" title="Kirim pesan">
+                    <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <path d="M5 12 19 5l-4 14-3-6-7-1z" />
+                        <path d="m12 13 7-8" />
+                    </svg>
+                </button>
             </div>
 
-            <div class="hero-card">
-                <div class="mini-card">
-                    <p class="mini-label">Contoh pertanyaan</p>
-                    <ul>
-                        <li>"Apa saja produk Samsung yang tersedia?"</li>
-                        <li>"Berapa harga Galaxy A15?"</li>
-                        <li>"Jelaskan Samsung Galaxy Tab yang ada."</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+            <p class="input-note">
+                Jawaban berdasarkan data katalog Shopee
+            </p>
+        </form>
 
-    <section id="features" class="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>Fitur Utama</h2>
-                <p>Beberapa kemampuan utama dari aplikasi chatbot produk ini.</p>
-            </div>
+    </main>
 
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3>Chatbot Interaktif</h3>
-                    <p>
-                        Pengguna dapat bertanya langsung tentang produk Samsung melalui antarmuka web.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🛒</div>
-                    <h3>Data dari Shopee</h3>
-                    <p>
-                        Jawaban chatbot didasarkan pada data produk hasil scraping dari toko Shopee.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <h3>RAG + AI</h3>
-                    <p>
-                        Sistem menggunakan pendekatan Retrieval-Augmented Generation agar jawaban lebih relevan.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3>Deployment Online</h3>
-                    <p>
-                        Aplikasi dapat diakses secara publik melalui Vercel tanpa harus menjalankan lokal.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="chat-section" class="chat-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Chat dengan Asisten Produk</h2>
-                <p>Tanyakan produk Samsung yang tersedia pada katalog hasil scraping.</p>
-            </div>
-
-            <div class="chat-wrapper">
-                <div class="chat-card">
-                    <div class="chat-header">
-                        <div>
-                            <h3>Samsung Product Assistant</h3>
-                            <span class="online-status">● Online</span>
-                        </div>
-                    </div>
-
-                    <div class="quick-questions">
-                        <button class="quick-btn" onclick="setQuestion('Apa saja produk Samsung yang tersedia?')">
-                            Semua produk Samsung
-                        </button>
-                        <button class="quick-btn" onclick="setQuestion('Berapa harga Samsung Galaxy A15?')">
-                            Harga Galaxy A15
-                        </button>
-                        <button class="quick-btn" onclick="setQuestion('Jelaskan produk Samsung yang tersedia')">
-                            Jelaskan produk
-                        </button>
-                    </div>
-
-                    <form id="chatForm" class="chat-form">
-                        <input id="chatInput" type="text" placeholder="Tanyakan produk Samsung..." required />
-                        <button type="submit">Kirim</button>
-                    </form>
-
-                    <div id="chatBox" class="chat-box">
-                        <div class="message bot">
-                            Halo! Saya siap membantu menjawab pertanyaan seputar produk Samsung dari data Shopee. 😊
-                        </div>
-                    </div>
-                </div>
-
-                <div class="info-card">
-                    <h3>Petunjuk Penggunaan</h3>
-                    <ul>
-                        <li>Tanyakan nama produk Samsung yang tersedia.</li>
-                        <li>Tanyakan harga dari produk tertentu.</li>
-                        <li>Gunakan nama produk yang ada di katalog agar hasil lebih akurat.</li>
-                        <li>Pastikan data scraping sudah tersimpan pada CSV.</li>
-                    </ul>
-
-                    <div class="proof-box">
-                        <h4>Bukti App Berjalan</h4>
-                        <p>
-                            Endpoint API dapat diuji melalui:
-                        </p>
-                        <code>/api/chat</code>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="container footer-content">
-            <p>© 2026 Chatbot Produk Shopee Samsung</p>
-            <p>Built with HTML, CSS, JavaScript, Groq, RAG, and Vercel</p>
-        </div>
-    </footer>
-
-    <script src="chat-web.js"></script>
 </body>
 
 </html>
