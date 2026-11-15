@@ -73,6 +73,52 @@ function addMessage(text, sender = "bot") {
     return bubble;
 }
 
+
+function renderProducts(items, container) {
+    if (!Array.isArray(items) || !items.length) return;
+
+    const list = document.createElement("div");
+    list.className = "product-list";
+
+    items.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+
+        function addText(tag, className, value) {
+            if (!value) return;
+            const el = document.createElement(tag);
+            el.className = className;
+            el.textContent = value;
+            card.appendChild(el);
+        }
+
+        addText("span", "product-category", product.category);
+        addText("strong", "product-name", product.name);
+        addText("p", "product-desc", product.description);
+        addText("strong", "product-price", product.price);
+
+        if (product.rating) {
+            addText("span", "product-rating", `Rating ${product.rating}`);
+        }
+
+        if (product.url) {
+            const link = document.createElement("a");
+            link.href = product.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.className = "product-link";
+            link.textContent = "Lihat di Shopee ↗";
+            card.appendChild(link);
+        }
+
+        list.appendChild(card);
+    });
+
+    container.appendChild(list);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+
 // Kirim pertanyaan ke RAG API
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
