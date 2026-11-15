@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#EE4D2D">
+    <title>Katalog Samsung | Shopee</title>
+
+    <style>
+        :root {
+            --orange: #EE4D2D;
+            --orange-dark: #D73E20;
+            --dark: #222222;
+            --muted: #777777;
+            --border: #E9E9E9;
+            --background: #F5F5F5;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--dark);
+            font-family: system-ui, -apple-system,
+                "Segoe UI", sans-serif;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1200px, calc(100% - 32px));
+            margin: auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 3px solid var(--orange);
+        }
+
+        .header-content {
+            min-height: 84px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            background: var(--orange);
+            color: var(--white);
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 4px;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .brand strong {
+            font-size: 20px;
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .header-link {
+            color: var(--orange);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Banner */
+        .banner {
+            background: var(--orange);
+            color: var(--white);
+            padding: 42px 0;
+        }
+
+        .banner h1 {
+            font-size: clamp(27px, 4vw, 40px);
+            line-height: 1.2;
+            margin: 0 0 12px;
+            letter-spacing: -.03em;
+        }
+
+        .banner p {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Search and filters */
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            margin: 28px 0 18px;
+        }
+
+        .search {
+            flex: 1;
+            display: flex;
+            background: var(--white);
+            border: 1px solid var(--border);
+            align-items: center;
+            padding: 0 15px;
+            gap: 10px;
+        }
+
+        .search svg {
+            flex-shrink: 0;
+            color: var(--muted);
+        }
+
+        .search input {
+            width: 100%;
+            border: 0;
+            outline: none;
+            padding: 15px 0;
+            background: transparent;
+            font-size: 14px;
+        }
+
+        select {
+            min-width: 175px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 0 14px;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        input:focus-visible,
+        select:focus-visible,
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 2px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            gap: 15px;
+        }
+
+        .section-heading h2 {
+            font-size: 19px;
+            margin: 0;
+        }
+
+        .section-heading span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Product cards */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            background: var(--white);
+            border: 1px solid var(--border);
+            transition: border-color .15s ease;
+        }
+
+        .product-card:hover {
+            border-color: var(--orange);
+        }
+
+        .product-image {
+            aspect-ratio: 1 / 1;
+            display: grid;
+            place-items: center;
+            position: relative;
+            background: #F0F1F3;
+            overflow: hidden;
+        }
+
+        .product-placeholder {
+            font-weight: 800;
+            font-size: 16px;
+            color: #9299A3;
+            letter-spacing: .05em;
+        }
+
+        .product-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #FFFFFF;
+        }
+
+        .product-info {
+            padding: 13px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 9px;
+        }
+
+        .product-category {
+            width: fit-content;
+            color: #C44224;
+            background: #FFF1EC;
+            padding: 3px 7px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .product-name {
+            font-size: 13px;
+            line-height: 1.5;
+            font-weight: 500;
+            overflow-wrap: anywhere;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 58px;
+        }
+
+        .product-description {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            color: var(--orange);
+            font-size: 17px;
+            font-weight: 700;
+            margin-top: auto;
+        }
+
+        .product-rating {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .product-action {
+            text-align: center;
+            background: var(--orange);
+            color: var(--white);
+            padding: 11px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: background-color .15s ease;
+        }
+
+        .product-action:hover {
+            background: var(--orange-dark);
+        }
+
+        /* Empty, loading, and load more */
+        .empty {
+            grid-column: 1 / -1;
+            padding: 54px 20px;
+            text-align: center;
+            background: var(--white);
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .load-more {
+            display: block;
+            margin: 24px auto 40px;
+            padding: 12px 32px;
+            background: var(--white);
+            border: 1px solid var(--orange);
+            color: var(--orange);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .load-more:hover {
+            background: #FFF1EC;
+        }
+
+        /* WhatsApp floating button */
+        .wa-button {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 100;
+            background: #168D49;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 14px 18px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .wa-button:hover {
+            background: #11743B;
+        }
+
+        footer {
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            padding: 24px 16px;
+            margin-top: 35px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 1050px) {
+            .products {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            .products {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            select {
+                min-height: 46px;
+            }
+
+            .banner {
+                padding: 30px 0;
+            }
+
+            .header-content {
+                min-height: 70px;
+            }
+
+            .brand strong {
+                font-size: 17px;
+            }
+
+            .wa-button {
+                right: 14px;
+                bottom: 14px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="brand">
+                <div class="brand-icon">S</div>
+                <div>
+                    <strong>Samsung Store</strong>
+                    <small>Katalog Produk Shopee</small>
+                </div>
+            </div>
+
+            <a class="header-link" href="#produk">
+                Lihat Katalog
+            </a>
+        </div>
+    </header>
+
+    <section class="banner">
+        <div class="container">
+            <h1>Temukan Produk Samsung</h1>
+            <p>
+                Jelajahi produk dari katalog Shopee.
+                Lihat harga dan tanyakan langsung melalui WhatsApp.
+            </p>
+        </div>
+    </section>
+
+    <main class="container" id="produk">
+        <div class="toolbar">
+            <label class="search">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    aria-hidden="true">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m16 16 5 5" />
+                </svg>
+
+                <input id="searchInput" type="search" placeholder="Cari nama produk Samsung..."
+                    aria-label="Cari produk">
+            </label>
+
+            <select id="categoryFilter" aria-label="Filter kategori">
+                <option value="">Semua Kategori</option>
+            </select>
+        </div>
+
+        <div class="section-heading">
+            <h2>Semua Produk</h2>
+            <span id="productCount" role="status">Memuat...</span>
+        </div>
+
+        <section class="products" id="productGrid" aria-label="Katalog produk">
+            <div class="empty">Memuat katalog produk...</div>
+        </section>
+
+        <button id="loadMore" class="load-more" hidden>
+            Muat Lebih Banyak
+        </button>
+    </main>
+
+    <a class="wa-button" id="waChat" href="https://api.whatsapp.com/send?phone=628113116882" target="_blank"
+        rel="noopener noreferrer">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" aria-hidden="true">
+            <path d="M5 19 3 22l1-6a9 9 0 1 1 4 4z" />
+            <path d="M9 9c1 3 3 5 6 6" />
+        </svg>
+        Chat via WhatsApp
+    </a>
+
+    <footer>
+        Katalog Samsung berdasarkan data scraping Shopee.
+        Harga dan ketersediaan mengikuti informasi sumber.
+    </footer>
+
+    <script>
+        const WA_NUMBER = "628113116882";
+        const CSV_URL = "/data/products.csv";
+        const PAGE_SIZE = 20;
+
+        let allProducts = [];
+        let visibleCount = PAGE_SIZE;
+
+        const grid = document.getElementById("productGrid");
+        const searchInput = document.getElementById("searchInput");
+        const categoryFilter = document.getElementById("categoryFilter");
+        const countText = document.getElementById("productCount");
+        const loadMore = document.getElementById("loadMore");
+
+        function whatsappLink(message) {
+            return "https://api.whatsapp.com/send?phone=" +
+                WA_NUMBER + "&text=" + encodeURIComponent(message);
+        }
+
+        document.getElementById("waChat").href =
+            whatsappLink("Halo, saya ingin bertanya tentang produk Samsung.");
+
+        // Parser CSV, termasuk kolom dengan koma dan tanda kutip.
+        function parseCSV(csv) {
+            const rows = [];
+            let row = [];
+            let value = "";
+            let quoted = false;
+
+            csv = csv.replace(/^\uFEFF/, "");
+
+            for (let i = 0; i < csv.length; i++) {
+                const c = csv[i];
+
+                if (c === '"') {
+                    if (quoted && csv[i + 1] === '"') {
+                        value += '"';
+                        i++;
+                    } else {
+                        quoted = !quoted;
+                    }
+                } else if (c === "," && !quoted) {
+                    row.push(value);
+                    value = "";
+                } else if ((c === "\n" || c === "\r") && !quoted) {
+                    if (c === "\r" && csv[i + 1] === "\n") i++;
+                    row.push(value);
+                    if (row.some(v => v.trim())) rows.push(row);
+                    row = [];
+                    value = "";
+                } else {
+                    value += c;
+                }
+            }
+
+            row.push(value);
+            if (row.some(v => v.trim())) rows.push(row);
+
+            if (rows.length < 2) return [];
+
+            const headers = rows.shift().map(
+                h => h.trim().toLowerCase()
+            );
+
+            return rows.map(cols => {
+                const obj = {};
+                headers.forEach((h, i) => {
+                    obj[h] = (cols[i] || "").trim();
+                });
+                return obj;
+            });
+        }
+
+        function getField(row, aliases) {
+            for (const key of aliases) {
+                if (row[key]) return row[key];
+            }
+            return "";
+        }
+
+        function formatPrice(value) {
+            if (!value) return "Harga tidak tersedia";
+
+            const clean = value.replace(/\./g, "").trim();
+
+            if (/^\d+$/.test(clean)) {
+                return new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    maximumFractionDigits: 0
+                }).format(Number(clean));
+            }
+
+            return value;
+        }
+
+        function validURL(value, shopeeOnly = false) {
+            try {
+                const url = new URL(value);
+                if (!["https:", "http:"].includes(url.protocol)) {
+                    return "";
+                }
+
+                if (shopeeOnly) {
+                    const host = url.hostname.toLowerCase();
+                    if (host !== "shopee.co.id" &&
+                        !host.endsWith(".shopee.co.id")) {
+                        return "";
+                    }
+                }
+
+                return url.href;
+            } catch {
+                return "";
+            }
+        }
+
+        function normalizeProduct(row) {
+            return {
+                name: getField(row, [
+                    "nama", "nama_produk", "nama produk",
+                    "product_name", "title", "name", "contents"
+                ]),
+                category: getField(row, [
+                    "kategori", "category"
+                ]) || "Lainnya",
+                price: getField(row, [
+                    "harga", "price"
+                ]),
+                description: getField(row, [
+                    "deskripsi", "description", "detail"
+                ]),
+                rating: getField(row, [
+                    "rating", "penilaian"
+                ]),
+                image: validURL(getField(row, [
+                    "gambar", "image", "image_url",
+                    "image src", "thumbnail"
+                ])),
+                link: validURL(getField(row, [
+                    "link", "link_shopee", "url",
+                    "product_url", "contents href", "href"
+                ]), true)
+            };
+        }
+
+        function makeText(tag, className, value) {
+            const element = document.createElement(tag);
+            element.className = className;
+            element.textContent = value;
+            return element;
+        }
+
+        function createCard(product) {
+            const card = document.createElement("article");
+            card.className = "product-card";
+
+            const imageBox = makeText(
+                "div", "product-image", ""
+            );
+
+            imageBox.appendChild(
+                makeText("span", "product-placeholder", "SAMSUNG")
+            );
+
+            if (product.image) {
+                const img = document.createElement("img");
+                img.src = product.image;
+                img.alt = product.name;
+                img.loading = "lazy";
+                img.addEventListener("error", () => img.remove());
+                imageBox.appendChild(img);
+            }
+
+            const info = document.createElement("div");
+            info.className = "product-info";
+
+            info.appendChild(
+                makeText("span", "product-category", product.category)
+            );
+
+            info.appendChild(
+                makeText("div", "product-name", product.name)
+            );
+
+            if (product.description) {
+                info.appendChild(makeText(
+                    "p", "product-description", product.description
+                ));
+            }
+
+            info.appendChild(makeText(
+                "div", "product-price", formatPrice(product.price)
+            ));
+
+            if (product.rating) {
+                info.appendChild(makeText(
+                    "div", "product-rating",
+                    "Rating: " + product.rating
+                ));
+            }
+
+            const action = document.createElement("a");
+            action.className = "product-action";
+            action.target = "_blank";
+            action.rel = "noopener noreferrer";
+
+            if (product.link) {
+                action.href = product.link;
+                action.textContent = "Lihat di Shopee";
+            } else {
+                action.href = whatsappLink(
+                    "Halo, saya ingin bertanya tentang " + product.name
+                );
+                action.textContent = "Tanya via WhatsApp";
+            }
+
+            card.append(imageBox, info, action);
+            return card;
+        }
+
+        function getFilteredProducts() {
+            const keyword = searchInput.value.toLowerCase().trim();
+            const category = categoryFilter.value;
+
+            return allProducts.filter(p => {
+                const matchesCategory =
+                    !category || p.category === category;
+
+                const text = [
+                    p.name, p.category, p.description
+                ].join(" ").toLowerCase();
+
+                return matchesCategory && text.includes(keyword);
+            });
+        }
+
+        function renderProducts() {
+            const filtered = getFilteredProducts();
+            const shown = filtered.slice(0, visibleCount);
+
+            grid.replaceChildren();
+
+            countText.textContent =
+                filtered.length + " produk ditemukan";
+
+            if (!filtered.length) {
+                grid.appendChild(makeText(
+                    "div", "empty",
+                    "Tidak ada produk yang sesuai dengan pencarian."
+                ));
+            } else {
+                const fragment = document.createDocumentFragment();
+                shown.forEach(p => fragment.appendChild(createCard(p)));
+                grid.appendChild(fragment);
+            }
+
+            loadMore.hidden = shown.length >= filtered.length;
+        }
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(CSV_URL, {
+                    cache: "no-store"
+                });
+
+                if (!response.ok) {
+                    throw new Error("CSV tidak ditemukan (" +
+                        response.status + ")");
+                }
+
+                const csv = await response.text();
+
+                allProducts = parseCSV(csv)
+                    .map(normalizeProduct)
+                    .filter(p => p.name);
+
+                const categories = [...new Set(
+                    allProducts.map(p => p.category)
+                )].sort();
+
+                categories.forEach(category => {
+                    const option = document.createElement("option");
+                    option.value = category;
+                    option.textContent = category;
+                    categoryFilter.appendChild(option);
+                });
+
+                renderProducts();
+
+            } catch (error) {
+                console.error("Katalog:", error);
+                countText.textContent = "Gagal memuat";
+                grid.replaceChildren(makeText(
+                    "div", "empty",
+                    "Katalog belum bisa dimuat. Periksa file data/products.csv."
+                ));
+            }
+        }
+
+        searchInput.addEventListener("input", () => {
+            visibleCount = PAGE_SIZE;
+            renderProducts();
+        });
+
+        categoryFilter.addEventListener("change", () => {
+            visibleCount = PAGE_SIZE;
+            renderProducts();
+        });
+
+        loadMore.addEventListener("click", () => {
+            visibleCount += PAGE_SIZE;
+            renderProducts();
+        });
+
+        loadProducts();
+    </script>
+</body>
+
+</html>
